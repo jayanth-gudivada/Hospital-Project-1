@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Delete Hospital</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./assets/css/style2.css">
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            border-color: #333333;
+            padding: 20px;
+            height: 256.66px;
+            width: 276.75px;
+            /* Change height to auto to allow content to expand */
+            margin: 10px;
+            max-width: 350px;
+            /* Set a maximum width for the card */
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hello Chief!!</h1>
+    <h3>Wanna Delete a Hospital from Db....</h3>
+
+    <div class="container">
+        <form action="/deleteHospital.html" method="post" onsubmit="return validateForm();">
+            <div class="card">
+                <h2>Hospital Details</h2>
+                <input type="text" name="oname" placeholder="Hospital name"><br>
+                <span class="error" id="onameError"></span><br><br>
+                <input type="text" name="oaddress" placeholder="Address"><br>
+                <span class="error" id="oaddressError"></span><br><br>
+                <input type="text" name="olocation" placeholder="Location"><br>
+                <span class="error" id="olocationError"></span>
+            </div>
+    </div>
+
+    <div class="center-button">
+        <button type="submit">Delete</button>
+    </div>
+    </form>
+
+    <div class="center-button">
+        <a href="/index2.html" style="color: white; text-decoration: none;"><button>Back</button></a>
+    </div>
+
+    <script>
+        // Function to clear all input fields and error messages
+        function clearForm() {
+            var onameField = document.querySelector('input[name="oname"]');
+            var oaddressField = document.querySelector('input[name="oaddress"]');
+            var olocationField = document.querySelector('input[name="olocation"]');
+            var onameError = document.getElementById("onameError");
+            var oaddressError = document.getElementById("oaddressError");
+            var olocationError = document.getElementById("olocationError");
+
+            // Clear input fields
+            onameField.value = "";
+            oaddressField.value = "";
+            olocationField.value = "";
+
+            // Clear error messages
+            onameError.innerHTML = "";
+            oaddressError.innerHTML = "";
+            olocationError.innerHTML = "";
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            var oname = document.querySelector('input[name="oname"]').value;
+            var oaddress = document.querySelector('input[name="oaddress"]').value;
+            var olocation = document.querySelector('input[name="olocation"]').value;
+
+            var onameError = document.getElementById("onameError");
+            var oaddressError = document.getElementById("oaddressError");
+            var olocationError = document.getElementById("olocationError");
+
+            // Reset error messages
+            onameError.innerHTML = "";
+            oaddressError.innerHTML = "";
+            olocationError.innerHTML = "";
+
+            // Check if any of the required fields are empty
+            var isValid = true;
+            if (oname === "") {
+                onameError.innerHTML = "Please enter the current hospital name.";
+                isValid = false;
+            }
+            if (oaddress === "") {
+                oaddressError.innerHTML = "Please enter the current hospital address.";
+                isValid = false;
+            }
+            if (olocation === "") {
+                olocationError.innerHTML = "Please enter the current hospital location.";
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        // Call clearForm when the page loads
+        window.onload = clearForm;
+    </script>
+
+</body>
+
+</html>

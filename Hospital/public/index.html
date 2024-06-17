@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>lab - home</title>
+    <meta name="title" content="Doclab - home">
+    <meta name="description" content="This is a madical html template made by codewithsadee">
+
+    <!-- 
+    - favicon
+  -->
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+    <!-- 
+    - google font link
+  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Rubik:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <!-- 
+    - preload images
+  -->
+    <link rel="preload" as="image" href="./assets/images/hero-banner.png">
+    <link rel="preload" as="image" href="./assets/images/hero-bg.png">
+
+</head>
+
+<body id="top">
+
+    <!-- 
+    - #PRELOADER
+  -->
+
+    <div class="preloader" data-preloader>
+        <div class="circle"></div>
+    </div>
+
+
+
+    <!-- 
+    - #HEADER
+  -->
+
+    <header class="header" data-header>
+        <div class="container">
+
+            <a href="#" class="logo">
+                <img src="./assets/images/logo.svg" width="136" height="46" alt="Doclab home">
+            </a>
+
+            <nav class="navbar" data-navbar>
+
+                <div class="navbar-top">
+
+                    <a href="#" class="logo">
+                        <img src="./assets/images/logo.svg" width="136" height="46" alt="Doclab home">
+                    </a>
+
+                    <button class="nav-close-btn" aria-label="clsoe menu" data-nav-toggler>
+                        <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+                    </button>
+
+                </div>
+
+                <ul class="navbar-list">
+
+                    <li class="navbar-item">
+                        <a href="#" class="navbar-link title-md">Home</a>
+                    </li>
+
+                    <li class="navbar-item">
+                        <a href="#Doc" class="navbar-link title-md">Services</a>
+                    </li>
+
+                    <li class="navbar-item">
+                        <a href="#Blogs" class="navbar-link title-md">Blog</a>
+                    </li>
+
+                    <li class="navbar-item">
+                        <a href="#myfooter" class="navbar-link title-md">Contact</a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
+
+
+            <a href="login.html" class="btn has-before title-md">Login</a>
+
+
+            <div class="overlay" data-nav-toggler data-overlay></div>
+
+        </div>
+    </header>
+
+
+
+
+
+    <main>
+        <article>
+
+            <!-- 
+        - #HERO
+      -->
+
+            <section class="section hero" style="background-image: url('./assets/images/hero-bg.png')"
+                aria-label="home">
+                <div class="container">
+
+                    <div class="hero-content">
+
+                        <p class="hero-subtitle has-before" data-reveal="left">Welcome To Doclab</p>
+
+                        <h1 class="headline-lg hero-title" data-reveal="left">
+                            Find Nearest <br>
+                            Doctor.
+                        </h1>
+
+                        <div class="hero-card" data-reveal="left">
+
+                            <p class="title-lg card-text">
+                                Search hospitals by locations.
+                            </p>
+
+                            <form action="/" method="post">
+                                <div class="wrapper">
+
+                                    <div class="input-wrapper title-lg">
+                                        <input type="text" name="xyz" placeholder="Locations" class="input-field">
+                                        <ion-icon name="location"></ion-icon>
+                                    </div>
+
+                                    <button type="submit" class="btn has-before">
+                                        <ion-icon name="search"></ion-icon>
+
+                                        <span class="span title-md">Find Now</span>
+                                    </button>
+
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <figure class="hero-banner" data-reveal="right">
+                        <img src="./assets/images/hero-banner.png" width="590" height="517" loading="eager"
+                            alt="hero banner" class="w-100">
+                    </figure>
+
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 
+        - #SERVICE
+      -->
+
+            <section id="Doc" class="service" aria-label="service">
+                <div class="container">
+
+                    <ul class="service-list">
+
+                        <li>
+                            <div class="service-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-1.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <h3 class="headline-sm card-title">
+                                    Psychiatry
+                                </h3>
+
+                                <p class="card-text">
+                                    Psychiatry is the study and treatment of mental disorders, focusing on emotional
+                                    well-being and psychological health.
+                                </p>
+
+                                <button
+                                    onclick="window.location.href='https://www.psychiatry.org/patients-families/what-is-psychiatry';"
+                                    class="btn-circle" aria-label="read more about psychiatry">
+                                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                </button>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="service-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-4.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <h3 class="headline-sm card-title">
+                                    Orthopedics
+                                </h3>
+
+                                <p class="card-text">
+                                    Orthopedics focuses on musculoskeletal health, treating bone and joint issues to
+                                    enhance mobility and well-being. </p>
+
+                                <button
+                                    onclick="window.location.href='https://www.medicalnewstoday.com/articles/what-is-orthopedics';"
+                                    class="btn-circle" aria-label="read more about Orthopedics">
+                                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                </button>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="service-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-2.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <h3 class="headline-sm card-title">
+                                    Gynecology
+                                </h3>
+
+                                <p class="card-text">
+                                    Gynecology is the medical specialty that cares for women's reproductive health,
+                                    covering female-specific conditions and treatments.
+                                </p>
+
+                                <button
+                                    onclick="window.location.href='https://www.news-medical.net/health/What-is-Gynecology.aspx';"
+                                    class="btn-circle" aria-label="read more about Gynecology">
+                                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                </button>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="service-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-3.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <h3 class="headline-sm card-title">
+                                    Pulmonology
+                                </h3>
+
+                                <p class="card-text">
+                                    Pulmonology specializes in the diagnosis and treatment of respiratory conditions,
+                                    emphasizing lung health and improved breathing. </p>
+
+                                <button
+                                    onclick="window.location.href='https://www.verywellhealth.com/what-is-pulmonology-5081298';"
+                                    class="btn-circle" aria-label="read more about Pulmonology">
+                                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                                </button>
+
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 
+        - #ABOUT
+      -->
+
+            <section class="section about" aria-labelledby="about-label">
+                <div class="container">
+
+                    <div class="about-content">
+
+                        <p class="section-subtitle title-lg has-after" id="about-label" data-reveal="left">About Us</p>
+
+                        <h2 class="headline-md" data-reveal="left">Experienced Workers</h2>
+
+                        <p class="section-text" data-reveal="left">
+                            Experienced Doctors bring a wealth of knowledge and skill to the team, driving efficiency
+                            and quality.
+                        </p>
+
+                        <ul class="tab-list" data-reveal="left">
+
+                            <li>
+                                <button class="tab-btn active">Vision</button>
+                            </li>
+
+                            <li>
+                                <button class="tab-btn">Mission</button>
+                            </li>
+
+                            <li>
+                                <button class="tab-btn">Strategy</button>
+                            </li>
+
+                        </ul>
+
+                        <p class="tab-text" data-reveal="left">
+                            Our vision for hospital branches is to establish a network of healthcare facilities that
+                            provide accessible, high-quality medical services to diverse communities, ensuring the
+                            well-being and health of our patients through innovation and compassion.
+                        </p>
+
+                        <div class="wrapper">
+
+                            <ul class="about-list">
+
+                                <li class="about-item" data-reveal="left">
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                                    <span class="span">Patient-Centered Care</span>
+                                </li>
+
+                                <li class="about-item" data-reveal="left">
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                                    <span class="span">Advanced Medical Technology</span>
+                                </li>
+
+                                <li class="about-item" data-reveal="left">
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                                    <span class="span">Community Engagement</span>
+                                </li>
+
+                                <li class="about-item" data-reveal="left">
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                                    <span class="span">Sustainability and Environmental Responsibility</span>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <figure class="about-banner" data-reveal="right">
+                        <img src="./assets/images/srikar.jpg" width="554" height="678" loading="lazy"
+                            alt="about banner" class="w-100">
+                    </figure>
+
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 
+        - #LISTING
+      -->
+
+            <section class="section listing" aria-labelledby="listing-label">
+                <div class="container">
+
+                    <ul class="grid-list">
+
+                        <li>
+                            <p class="section-subtitle title-lg" id="listing-label" data-reveal="left">Doctors Listig
+                            </p>
+
+                            <h2 class="headline-md" data-reveal="left">Browse by specialist</h2>
+                        </li>
+
+                        <li>
+                            <div class="listing-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-1.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <div>
+                                    <a href="https://www.psychiatry.org/patients-families/what-is-psychiatry">
+                                        <h3 class="headline-sm card-title">Psychiatry</h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="listing-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-2.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <div>
+                                    <a href="https://www.news-medical.net/health/What-is-Gynecology.aspx">
+                                        <h3 class="headline-sm card-title">Gynecology</h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="listing-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-4.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <div>
+                                    <a href="https://www.verywellhealth.com/what-is-pulmonology-5081298">
+                                        <h3 class="headline-sm card-title">Pulmonology</h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="listing-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-5.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <div>
+                                    <a href="https://www.medicalnewstoday.com/articles/what-is-orthopedics">
+                                        <h3 class="headline-sm card-title">Orthopedics</h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="listing-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-6.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <div>
+                                    <a href="https://www.news-medical.net/health/What-is-Pediatrics.aspx">
+                                        <h3 class="headline-sm card-title">Pediatrics</h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="listing-card" data-reveal="bottom">
+
+                                <div class="card-icon">
+                                    <img src="./assets/images/icon-7.png" width="71" height="71" loading="lazy"
+                                        alt="icon">
+                                </div>
+
+                                <div><a href="https://www.thoughtco.com/osteology-definition-and-applications-4588264">
+                                        <h3 class="headline-sm card-title">Osteology</h3>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 
+        - #BLOG
+      -->
+
+            <section id="Blogs" class="section blog" aria-labelledby="blog-label">
+                <div class="container">
+
+                    <p class="section-subtitle title-lg text-center" id="blog-label" data-reveal="bottom">
+                        News & Article
+                    </p>
+
+                    <h2 class="section-title headline-md text-center" data-reveal="bottom">Latest Articles</h2>
+
+                    <ul class="grid-list">
+
+                        <li>
+                            <div class="blog-card has-before has-after" data-reveal="bottom">
+
+                                <div class="meta-wrapper">
+
+                                    <div class="card-meta">
+                                        <ion-icon name="person-outline"></ion-icon>
+
+                                        <span class="span">By Admin</span>
+                                    </div>
+
+                                    <div class="card-meta">
+                                        <ion-icon name="folder-outline"></ion-icon>
+
+                                        <span class="span">Specialist</span>
+                                    </div>
+
+                                </div>
+
+                                <h3 class="headline-sm card-title">Could intermittent fasting reduce breast cancer</h3>
+
+                                <time class="title-sm date" datetime="2023-01-19">19 January, 2023</time>
+
+                                <p class="card-text">
+                                    Breast cancer(BC) is the most-frequent malignancy amongst women, after non-melanoma skin neoplasms.Approximately 25% of estimated new malignancy cases and 14% of estimated neoplasm-induced deaths in women are attributed to BC.Previous epidemiological studies identified obesity as a risk factor for BC.
+                                </p>
+
+                                <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9920353/" class="btn-text title-lg">Read More</a>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="blog-card has-before has-after" data-reveal="bottom">
+
+                                <div class="meta-wrapper">
+
+                                    <div class="card-meta">
+                                        <ion-icon name="person-outline"></ion-icon>
+
+                                        <span class="span">By Admin</span>
+                                    </div>
+
+                                    <div class="card-meta">
+                                        <ion-icon name="folder-outline"></ion-icon>
+
+                                        <span class="span">Specialist</span>
+                                    </div>
+
+                                </div>
+
+                                <h3 class="headline-sm card-title">Give children more autonomy during the pandemic</h3>
+
+                                <time class="title-sm date" datetime="2021-01-30">30 January, 2021</time>
+
+                                <p class="card-text">
+                                    The study found that “autonomy-supportive parenting behavior is positively associated both with better child well-being and higher parental need fulfillment.
+                                    As an added benefit, it also found that while this parenting technique requires care and energy to maintain, it also provided something of a recharging effect for parents.
+                                </p>
+
+                                <a href="https://www.medicalnewstoday.com/articles/give-children-more-autonomy-during-the-pandemic-says-study" class="btn-text title-lg">Read More</a>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="blog-card has-before has-after" data-reveal="bottom">
+
+                                <div class="meta-wrapper">
+
+                                    <div class="card-meta">
+                                        <ion-icon name="person-outline"></ion-icon>
+
+                                        <span class="span">By Admin</span>
+                                    </div>
+
+                                    <div class="card-meta">
+                                        <ion-icon name="folder-outline"></ion-icon>
+
+                                        <span class="span">Specialist</span>
+                                    </div>
+
+                                </div>
+
+                                <h3 class="headline-sm card-title">How do binge eating and drinking impact the liver?
+                                </h3>
+
+                                <time class="title-sm date" datetime="2021-01-31">31 January, 2021</time>
+
+                                <p class="card-text">
+                                    A recent study that simulated a tailgate party found that eating foods high in carbohydrates while consuming relatively lower amounts of alcohol was associated with increased liver fat.
+                                    “Tailgating” refers to a social gathering where people serve and eat food from the back of a parked vehicle, often in the car park of a sports stadium.
+                                </p>
+
+                                <a href="https://www.medicalnewstoday.com/articles/how-do-binge-eating-and-drinking-impact-the-liver" class="btn-text title-lg">Read More</a>
+
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+
+
+
+
+    <!-- 
+    - #FOOTER
+  -->
+
+    <footer id="myfooter" class="footer" style="background-image: url('./assets/images/footer-bg.png')">
+        <div class="container">
+
+
+
+            <div class="footer-bottom">
+
+                <p class="text copyright">
+                    &copy; Doclab 2023 | All Rights Reserved by Srikar & Co.
+                </p>
+
+                <ul class="social-list">
+
+                    <li>
+                        <a href="#" class="social-link">
+                            <ion-icon name="logo-facebook"></ion-icon>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="social-link">
+                            <ion-icon name="logo-twitter"></ion-icon>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="social-link">
+                            <ion-icon name="logo-linkedin"></ion-icon>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- 
+    - #BACK TO TOP
+  -->
+
+    <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>
+        <ion-icon name="chevron-up"></ion-icon>
+    </a>
+
+
+    <!-- 
+    - custom js link
+  -->
+    <script src="./assets/js/script.js"></script>
+
+    <!-- 
+    - ionicon link
+  -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

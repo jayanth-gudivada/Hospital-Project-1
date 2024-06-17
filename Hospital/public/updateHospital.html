@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Update Hospital</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./assets/css/style2.css">
+</head>
+
+<body>
+    <h1>Hello Chief!!</h1>
+    <h3>Wanna Update an existing Hospital details....</h3>
+
+    <div class="container">
+        <form action="/updateHospital.html" method="post" onsubmit="return validateForm();">
+            <div class="card">
+                <h2>Current Details</h2><br>
+                <input type="text" name="oname" placeholder="Hospital name"><br>
+                <span class="error" id="onameError"></span><br><br>
+                <input type="text" name="oaddress" placeholder="Address"><br>
+                <span class="error" id="oaddressError"></span><br><br>
+                <input type="text" name="olocation" placeholder="Location"><br>
+                <span class="error" id="olocationError"></span>
+            </div>
+
+            <div class="card">
+                <h2>Update to</h2><br>
+                <input type="text" name="nname" placeholder="Hospital name"><br>
+                <span class="error" id="nnameError"></span><br><br>
+                <input type="text" name="naddress" placeholder="Address"><br>
+                <span class="error" id="naddressError"></span><br><br>
+                <input type="text" name="nlocation" placeholder="Location"><br>
+                <span class="error" id="nlocationError"></span>
+            </div>
+    </div>
+
+    <div class="center-button">
+        <button type="submit">Update</button>
+    </div>
+    </form>
+
+    <div class="center-button">
+        <a href="/index2.html" style="color: white; text-decoration: none;"><button>Back</button></a>
+    </div>
+
+    <script>
+        // Function to clear all input fields
+        function clearForm() {
+            document.querySelector('input[name="oname"]').value = "";
+            document.querySelector('input[name="oaddress"]').value = "";
+            document.querySelector('input[name="olocation"]').value = "";
+            document.querySelector('input[name="nname"]').value = "";
+            document.querySelector('input[name="naddress"]').value = "";
+            document.querySelector('input[name="nlocation"]').value = "";
+
+            // Clear error messages
+            var errorElements = document.getElementsByClassName("error");
+            for (var i = 0; i < errorElements.length; i++) {
+                errorElements[i].innerHTML = "";
+            }
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            var oname = document.querySelector('input[name="oname"]').value;
+            var oaddress = document.querySelector('input[name="oaddress"]').value;
+            var olocation = document.querySelector('input[name="olocation"]').value;
+            var nname = document.querySelector('input[name="nname"]').value;
+            var naddress = document.querySelector('input[name="naddress"]').value;
+            var nlocation = document.querySelector('input[name="nlocation"]').value;
+
+            var onameError = document.getElementById("onameError");
+            var oaddressError = document.getElementById("oaddressError");
+            var olocationError = document.getElementById("olocationError");
+            var nnameError = document.getElementById("nnameError");
+            var naddressError = document.getElementById("naddressError");
+            var nlocationError = document.getElementById("nlocationError");
+
+            // Reset error messages
+            onameError.innerHTML = "";
+            oaddressError.innerHTML = "";
+            olocationError.innerHTML = "";
+            nnameError.innerHTML = "";
+            naddressError.innerHTML = "";
+            nlocationError.innerHTML = "";
+
+            // Check if any of the required fields are empty
+            var isValid = true;
+            if (oname === "") {
+                onameError.innerHTML = "Please enter the current hospital name.";
+                isValid = false;
+            }
+            if (oaddress === "") {
+                oaddressError.innerHTML = "Please enter the current hospital address.";
+                isValid = false;
+            }
+            if (olocation === "") {
+                olocationError.innerHTML = "Please enter the current hospital location.";
+                isValid = false;
+            }
+            if (nname === "") {
+                nnameError.innerHTML = "Please enter the new hospital name.";
+                isValid = false;
+            }
+            if (naddress === "") {
+                naddressError.innerHTML = "Please enter the new hospital address.";
+                isValid = false;
+            }
+            if (nlocation === "") {
+                nlocationError.innerHTML = "Please enter the new hospital location.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Call clearForm when the page loads
+        window.onload = clearForm;
+    </script>
+
+</body>
+
+</html>

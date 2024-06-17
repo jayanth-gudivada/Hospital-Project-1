@@ -1,0 +1,89 @@
+body {
+    background-color: antiquewhite;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Dancing Script', sans-serif;
+    font-size: 70px;
+    font-weight: bold;
+    color: #333333;
+    text-shadow: 1px 1px #cccccc;
+    margin-top: 5%;
+    margin-bottom: 0px;
+}
+
+h2,
+h3 {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #333333;
+    text-shadow: 1px 1px #cccccc;
+    margin-top: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Allow items to wrap to the next line when necessary */
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    border-color: #333333;
+    padding: 20px;
+    height: 256.66px;
+    width: 276.75px;
+    /* Change height to auto to allow content to expand */
+    margin: 10px;
+    margin-right: 75px;
+    max-width: 350px;
+    /* Set a maximum width for the card */
+    display: inline-block;
+    text-align: left;
+}
+
+.center-button {
+    text-align: center;
+    margin-top: 10px;
+    /* Add margin-top for spacing */
+    width: 100%;
+    /* Set width to 100% so it takes the full width of the container */
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+button {
+    background-color: #0074d9;
+    color: #fff;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .card {
+        margin-right: 0;
+        margin-bottom: 10px;
+        max-width: 100%;
+        /* Allow the card to take the full width on smaller screens */
+    }
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Add Hospital</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./assets/css/style2.css">
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            border-color: #333333;
+            padding: 20px;
+            height: 256.66px;
+            width: 276.75px;
+            /* Change height to auto to allow content to expand */
+            margin: 10px;
+            max-width: 350px;
+            /* Set a maximum width for the card */
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Enter the following details to add a new hospital to the db</h1><br><br><br><br>
+
+    <div class="container">
+        <form action="/addHospital.html" method="post" onsubmit="return validateForm();">
+            <div class="card">
+                <h2>Hospital Details</h2>
+                <input type="text" name="name" placeholder="Hospital name"><br>
+                <span class="error" id="nameError"></span><br><br>
+                <input type="text" name="address" placeholder="Address"><br>
+                <span class="error" id="addressError"></span><br><br>
+                <input type="text" name="location" placeholder="Location"><br>
+                <span class="error" id="locationError"></span>
+            </div>
+    </div>
+
+    <div class="center-button">
+        <button type="submit">Add</button>
+    </div>
+    </form>
+
+    <div class="center-button">
+        <a href="/index2.html" style="color: white; text-decoration: none;"><button>Back</button></a>
+    </div>
+
+    <script>
+        // Function to clear all input fields and error messages
+        function clearForm() {
+            var nameField = document.querySelector('input[name="name"]');
+            var addressField = document.querySelector('input[name="address"]');
+            var locationField = document.querySelector('input[name="location"]');
+            var nameError = document.getElementById("nameError");
+            var addressError = document.getElementById("addressError");
+            var locationError = document.getElementById("locationError");
+
+            // Clear input fields
+            nameField.value = "";
+            addressField.value = "";
+            locationField.value = "";
+
+            // Clear error messages
+            nameError.innerHTML = "";
+            addressError.innerHTML = "";
+            locationError.innerHTML = "";
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            var name = document.querySelector('input[name="name"]').value;
+            var address = document.querySelector('input[name="address"]').value;
+            var location = document.querySelector('input[name="location"]').value;
+
+            var nameError = document.getElementById("nameError");
+            var addressError = document.getElementById("addressError");
+            var locationError = document.getElementById("locationError");
+
+            // Reset error messages
+            nameError.innerHTML = "";
+            addressError.innerHTML = "";
+            locationError.innerHTML = "";
+
+            // Check if any of the required fields are empty
+            var isValid = true;
+            if (name === "") {
+                nameError.innerHTML = "Please enter the Hospital name.";
+                isValid = false;
+            }
+            if (address === "") {
+                addressError.innerHTML = "Please enter the Hospital address.";
+                isValid = false;
+            }
+            if (location === "") {
+                locationError.innerHTML = "Please enter the Hospital location.";
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        // Call clearForm when the page loads
+        window.onload = clearForm;
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>New User</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./assets/css/style2.css">
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            border-color: #333333;
+            padding: 20px;
+            height: 256.66px;
+            width: 276.75px;
+            /* Change height to auto to allow content to expand */
+            margin: 10px;
+            max-width: 350px;
+            /* Set a maximum width for the card */
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form action="/newUser.html" method="post" onsubmit="return validateForm();">
+            <h1>Enter the following details to add a new admin member</h1><br><br><br><br>
+            <div class="card">
+                <h2>New User Details</h2><br>
+
+                <input type="text" name="ename" placeholder="User Name"><br>
+                <span class="error" id="enameError"></span><br><br>
+                <input type="password" name="epassword" placeholder="Password"><br>
+                <span class="error" id="epasswordError"></span><br><br>
+            </div>
+    </div>
+
+    <div class="center-button">
+        <button type="submit">Add</button>
+    </div>
+    </form>
+
+    <div class="center-button">
+        <a href="/index2.html" style="color: white; text-decoration: none;"><button>Back</button></a>
+    </div>
+
+    <script>
+        // Function to clear all input fields and error messages
+        function clearForm() {
+            var enameField = document.querySelector('input[name="ename"]');
+            var epasswordField = document.querySelector('input[name="epassword"]');
+            var enameError = document.getElementById("enameError");
+            var epasswordError = document.getElementById("epasswordError");
+
+            // Clear input fields
+            enameField.value = "";
+            epasswordField.value = "";
+
+            // Clear error messages
+            enameError.innerHTML = "";
+            epasswordError.innerHTML = "";
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            var ename = document.querySelector('input[name="ename"]').value;
+            var epassword = document.querySelector('input[name="epassword"]').value;
+
+            var enameError = document.getElementById("enameError");
+            var epasswordError = document.getElementById("epasswordError");
+
+            // Reset error messages
+            enameError.innerHTML = "";
+            epasswordError.innerHTML = "";
+
+            // Check if any of the required fields are empty
+            var isValid = true;
+            if (ename === "") {
+                enameError.innerHTML = "Please enter the User name.";
+                isValid = false;
+            }
+            if (epassword === "") {
+                epasswordError.innerHTML = "Please enter the password.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Call clearForm when the page loads
+        window.onload = clearForm;
+    </script>
+
+</body>
+
+</html>

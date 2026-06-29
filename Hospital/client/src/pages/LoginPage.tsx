@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Paper,
@@ -12,16 +12,11 @@ import {
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/authSlice';
 import ThemeToggle from '../components/ThemeToggle';
-
-interface LocationState {
-  from?: string;
-}
+import { roleHome } from '../lib/roles';
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as LocationState | null)?.from || '/admin';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,8 +28,9 @@ export default function LoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      await dispatch(login({ email: email.trim(), password })).unwrap();
-      navigate(from, { replace: true });
+      // Send each user to their role's area (admin / doctor / patient).
+      const user = await dispatch(login({ email: email.trim(), password })).unwrap();
+      navigate(roleHome(user.role), { replace: true });
     } catch (err: unknown) {
       // The thunk rejects with the server message (a string) via rejectWithValue.
       setError(typeof err === 'string' ? err : 'Login failed. Please try again.');

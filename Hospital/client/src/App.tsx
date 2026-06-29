@@ -7,9 +7,12 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import HospitalsPage from './pages/HospitalsPage';
 import UsersPage from './pages/UsersPage';
+import DoctorHomePage from './pages/DoctorHomePage';
+import PatientHomePage from './pages/PatientHomePage';
 import { getToken } from './api/client';
 import { useAppDispatch } from './store/hooks';
 import { loadSession } from './store/authSlice';
+import { ROLE_ADMIN, ROLE_DOCTOR, ROLE_PATIENT } from './lib/roles';
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -26,11 +29,11 @@ export default function App() {
       <Route path="/" element={<PublicHomePage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Admin area (JWT-protected) */}
+      {/* Admin area (admins only) */}
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allow={[ROLE_ADMIN]}>
             <Layout>
               <DashboardPage />
             </Layout>
@@ -40,7 +43,7 @@ export default function App() {
       <Route
         path="/admin/hospitals"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allow={[ROLE_ADMIN]}>
             <Layout>
               <HospitalsPage />
             </Layout>
@@ -50,9 +53,33 @@ export default function App() {
       <Route
         path="/admin/users"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allow={[ROLE_ADMIN]}>
             <Layout>
               <UsersPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Doctor area (doctors only) */}
+      <Route
+        path="/doctor"
+        element={
+          <ProtectedRoute allow={[ROLE_DOCTOR]}>
+            <Layout>
+              <DoctorHomePage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Patient area (patients only) */}
+      <Route
+        path="/patient"
+        element={
+          <ProtectedRoute allow={[ROLE_PATIENT]}>
+            <Layout>
+              <PatientHomePage />
             </Layout>
           </ProtectedRoute>
         }

@@ -11,4 +11,20 @@ export default defineConfig({
       '/api': 'http://localhost:3094',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Split big dependencies into their own chunks so no single file is huge
+        // and browsers can cache vendor code separately from app code.
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@mui/x-data-grid')) return 'mui-x';
+            if (id.includes('@mui') || id.includes('@emotion')) return 'mui';
+            if (id.includes('react')) return 'react';
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
 })

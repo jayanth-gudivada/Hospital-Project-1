@@ -22,7 +22,10 @@ const getTask1 = async (req, res) => {
     try {
         const { id: hospitallocation } = req.params;
 
-        const info = await Info.find({ location: hospitallocation }).select('-_id name address location ');
+        // Escape regex special characters so user input is matched literally
+        const escapedLocation = hospitallocation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // Case-insensitive exact match on location (anchored regex)
+        const info = await Info.find({ location: { $regex: `^${escapedLocation}$`, $options: 'i' } }).select('-_id name address location ');
 
         if (info.length === 0) {
             const errorMessage = 'No hospital details present in database';
@@ -128,7 +131,8 @@ const getTask = async (req, res) => {
             return res.status(404).send('<script>alert("User not found"); window.location = "/login.html";</script>');
         } else {
             // return res.status(200).json({ msg: 'User found!!!!!!!!!!!!!!!!!!!!!!!!' });
-            res.status(200).redirect('/index2.html');
+            // pass a one-time flag so the page can mark this session as authenticated
+            res.status(200).redirect('/index2.html?auth=ok');
         }
     } catch (error) {
         res.status(500).json({ msg: error })
@@ -252,6 +256,64 @@ const deleteTask = async (req, res) => {
 }
 
 
+/* All admins / users */
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await Login.find({})
+        res.status(201).json({ users });
+    } catch (error) {
+        res.status(500).json({ msg: error })
+    }
+}
+
+
+
+// update user
+const updateUser = async (req, res) => {
+    try {
+        const { o1: oemail } = req.params
+        const { o2: opassword } = req.params
+
+        const { n1: nemail } = req.params
+        const { n2: npassword } = req.params
+
+        const found = await Login.findOne({ email: oemail, password: opassword })
+
+        if (found) {
+            await Login.findOneAndUpdate({ email: oemail, password: opassword }, { email: nemail, password: npassword })
+            return res.status(201).send('<script>alert("Successfully updated"); window.location = "/index2.html";</script>');
+        } else {
+            return res.status(501).send('<script>alert("No user found with the given details"); window.location = "/index2.html";</script>');
+        }
+
+    } catch (error) {
+        res.status(500).json({ msg: error })
+    }
+}
+
+
+
+// delete user
+const deleteUser = async (req, res) => {
+    try {
+        const { o1: oemail } = req.params
+        const { o2: opassword } = req.params
+
+        const found = await Login.findOne({ email: oemail, password: opassword })
+
+        if (found) {
+            await Login.findOneAndDelete({ email: oemail, password: opassword })
+            return res.status(201).send('<script>alert("Successfully deleted"); window.location = "/index2.html";</script>');
+        } else {
+            return res.status(501).send('<script>alert("No user found with the given details"); window.location = "/index2.html";</script>');
+        }
+
+    } catch (error) {
+        res.status(500).json({ msg: error })
+    }
+}
+
+
 module.exports = {
     getAllTasks,
     createTask,
@@ -259,5 +321,8 @@ module.exports = {
     getTask,
     getTask1,
     updateTask,
-    deleteTask
+    deleteTask,
+    getAllUsers,
+    updateUser,
+    deleteUser
 }

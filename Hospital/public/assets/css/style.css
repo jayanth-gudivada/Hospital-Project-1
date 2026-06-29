@@ -296,7 +296,7 @@ body.nav-active {
 
 /* HEADER */
 .header .btn {
-  display: none;
+  display: inline-block;
 }
 .header {
   position: absolute;
@@ -325,10 +325,12 @@ body.nav-active {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
 }
 .nav-open-btn {
   color: var(--white);
   font-size: 4rem;
+  margin-inline-start: auto;
 }
 .navbar,
 .overlay {

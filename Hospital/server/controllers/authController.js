@@ -36,10 +36,12 @@ const login = asyncHandler(async (req, res) => {
         ok = await bcrypt.compare(password, user.password);
     } else {
         // Legacy plaintext row: compare directly, then transparently upgrade to a hash.
+        // Skip full-document validation so legacy rows missing the newer required
+        // fields (firstName/lastName/phone) can still upgrade their password.
         ok = password === user.password;
         if (ok) {
             user.password = await bcrypt.hash(password, 10);
-            await user.save();
+            await user.save({ validateBeforeSave: false });
         }
     }
 

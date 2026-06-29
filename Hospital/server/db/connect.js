@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
-const connectDB = (url) => {
-    return mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-};
+// Opens the shared MongoDB connection used by every model.
+const connectDB = (url) => mongoose.connect(url);
 
 module.exports = connectDB;

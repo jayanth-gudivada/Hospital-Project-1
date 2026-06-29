@@ -10,6 +10,7 @@ import {
   Stack,
 } from '@mui/material';
 import { useAuth } from '../auth/AuthContext';
+import { getErrorMessage } from '../lib/errors';
 
 interface LocationState {
   from?: string;
@@ -34,10 +35,7 @@ export default function LoginPage() {
       await login(email.trim(), password);
       navigate(from, { replace: true });
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { msg?: string } } })?.response?.data?.msg ||
-        'Login failed. Please try again.';
-      setError(msg);
+      setError(getErrorMessage(err, 'Login failed. Please try again.'));
     } finally {
       setSubmitting(false);
     }
@@ -56,7 +54,6 @@ export default function LoginPage() {
     >
       <Paper elevation={6} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3 }}>
         <Stack spacing={1} sx={{ mb: 3, alignItems: 'center' }}>
-          <Box component="img" src="/logo-dark.svg" alt="Doclab" sx={{ height: 40 }} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
           <Typography variant="h5">Admin Login</Typography>
           <Typography variant="body2" color="text.secondary">
             Sign in to manage Doclab

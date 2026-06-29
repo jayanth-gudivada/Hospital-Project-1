@@ -1,18 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Stack,
-  Typography,
-  IconButton,
   TextField,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
-  Alert,
   InputAdornment,
 } from '@mui/material';
 import {
@@ -21,7 +16,6 @@ import {
   type GridColDef,
   type GridPaginationModel,
 } from '@mui/x-data-grid';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -34,12 +28,16 @@ import {
   type Hospital,
   type HospitalInput,
 } from '../api/hospitals';
+import { getErrorMessage } from '../lib/errors';
+import { useToast } from '../hooks/useToast';
+import Toast from '../components/Toast';
+import PageHeader from '../components/PageHeader';
+import ConfirmDialog from '../components/ConfirmDialog';
+import { dataGridSx, dataGridWrapperSx } from '../components/dataGridStyles';
 
 const EMPTY: HospitalInput = { name: '', location: '', address: '' };
 
 export default function HospitalsPage() {
-  const navigate = useNavigate();
-
   const [rows, setRows] = useState<Hospital[]>([]);
   const [rowCount, setRowCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -60,8 +58,9 @@ export default function HospitalsPage() {
   // delete confirm state
   const [toDelete, setToDelete] = useState<Hospital | null>(null);
 
-  const [toast, setToast] = useState<{ msg: string; sev: 'success' | 'error' } | null>(null);
+  const { toast, showToast, hideToast } = useToast();
 
+  // Load one server-side page of hospitals matching the current search.
   const fetchRows = useCallback(async () => {
     setLoading(true);
     try {
@@ -73,11 +72,11 @@ export default function HospitalsPage() {
       setRows(res.items);
       setRowCount(res.total);
     } catch {
-      setToast({ msg: 'Failed to load hospitals', sev: 'error' });
+      showToast('Failed to load hospitals', 'error');
     } finally {
       setLoading(false);
     }
-  }, [search, paginationModel]);
+  }, [search, paginationModel, showToast]);
 
   useEffect(() => {
     fetchRows();
@@ -92,54 +91,57 @@ export default function HospitalsPage() {
     return () => clearTimeout(t);
   }, [searchInput]);
 
+  // Open the dialog in "add" mode with empty fields.
   function openAdd() {
     setEditing(null);
     setForm(EMPTY);
     setDialogOpen(true);
   }
 
+  // Open the dialog in "edit" mode pre-filled with the row's values.
   function openEdit(h: Hospital) {
     setEditing(h);
     setForm({ name: h.name, location: h.location, address: h.address });
     setDialogOpen(true);
   }
 
+  // Create or update the hospital, then refresh the grid.
   async function handleSave() {
     if (!form.name.trim() || !form.location.trim() || !form.address.trim()) {
-      setToast({ msg: 'Please fill all fields', sev: 'error' });
+      showToast('Please fill all fields', 'error');
       return;
     }
     setSaving(true);
     try {
       if (editing) {
         await updateHospital(editing._id, form);
-        setToast({ msg: 'Hospital updated', sev: 'success' });
+        showToast('Hospital updated', 'success');
       } else {
         await createHospital(form);
-        setToast({ msg: 'Hospital added', sev: 'success' });
+        showToast('Hospital added', 'success');
       }
       setDialogOpen(false);
       fetchRows();
-    } catch {
-      setToast({ msg: 'Save failed', sev: 'error' });
+    } catch (err: unknown) {
+      showToast(getErrorMessage(err, 'Save failed'), 'error');
     } finally {
       setSaving(false);
     }
   }
 
+  // Delete the confirmed hospital, stepping back a page if it was the last row.
   async function handleDelete() {
     if (!toDelete) return;
     try {
       await deleteHospital(toDelete._id);
-      setToast({ msg: `Hospital “${toDelete.name}” deleted`, sev: 'success' });
-      // If we just removed the last row on a page, step back a page.
+      showToast(`Hospital “${toDelete.name}” deleted`, 'success');
       if (rows.length === 1 && paginationModel.page > 0) {
         setPaginationModel((m) => ({ ...m, page: m.page - 1 }));
       } else {
         fetchRows();
       }
     } catch {
-      setToast({ msg: 'Delete failed', sev: 'error' });
+      showToast('Delete failed', 'error');
     } finally {
       setToDelete(null);
     }
@@ -186,30 +188,13 @@ export default function HospitalsPage() {
 
   return (
     <Box>
-      <Stack direction="row" spacing={1.5} sx={{ mb: 1, alignItems: 'center' }}>
-        <IconButton
-          aria-label="Back to dashboard"
-          onClick={() => navigate('/admin')}
-          sx={{
-            border: '1px solid',
-            borderColor: 'divider',
-            color: 'text.secondary',
-            transition: 'background-color 0.2s, color 0.2s, border-color 0.2s',
-            '&:hover': {
-              bgcolor: 'primary.main',
-              borderColor: 'primary.main',
-              color: 'primary.contrastText',
-            },
-          }}
-        >
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h4">Manage Hospitals</Typography>
-      </Stack>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        View every registered hospital below. Use the action icons on each row to edit or delete, or add a new one.
-      </Typography>
+      <PageHeader
+        backTo="/admin"
+        title="Manage Hospitals"
+        description="View every registered hospital below. Use the action icons on each row to edit or delete, or add a new one."
+      />
 
+      {/* Search box + Add button */}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         spacing={2}
@@ -236,7 +221,8 @@ export default function HospitalsPage() {
         </Button>
       </Stack>
 
-      <Box sx={{ bgcolor: 'background.paper', borderRadius: 3, boxShadow: 1 }}>
+      {/* Hospitals table */}
+      <Box sx={dataGridWrapperSx}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -251,19 +237,7 @@ export default function HospitalsPage() {
           disableColumnMenu
           disableColumnSorting
           autoHeight
-          sx={{
-            border: 'none',
-            // Paint the navy background directly on the header strip + each header
-            // cell (don't rely on the --DataGrid-containerBackground variable, which
-            // this build leaves white), then force white title text on top.
-            '--DataGrid-containerBackground': 'hsl(222,44%,8%)',
-            '& .MuiDataGrid-columnHeaders': { backgroundColor: 'hsl(222,44%,8%)' },
-            '& .MuiDataGrid-columnHeader': { backgroundColor: 'hsl(222,44%,8%)', color: '#fff' },
-            '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 600, color: '#fff' },
-            '& .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-sortIcon, & .MuiDataGrid-menuIconButton': {
-              color: '#fff',
-            },
-          }}
+          sx={dataGridSx}
         />
       </Box>
 
@@ -302,33 +276,15 @@ export default function HospitalsPage() {
       </Dialog>
 
       {/* Delete confirm */}
-      <Dialog open={!!toDelete} onClose={() => setToDelete(null)}>
-        <DialogTitle>Delete hospital?</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Delete “{toDelete?.name}”? This cannot be undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setToDelete(null)}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleDelete}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={!!toDelete}
+        title="Delete hospital?"
+        message={`Delete “${toDelete?.name}”? This cannot be undone.`}
+        onConfirm={handleDelete}
+        onCancel={() => setToDelete(null)}
+      />
 
-      <Snackbar
-        open={!!toast}
-        autoHideDuration={3000}
-        onClose={() => setToast(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        {toast ? (
-          <Alert severity={toast.sev} onClose={() => setToast(null)} variant="filled">
-            {toast.msg}
-          </Alert>
-        ) : undefined}
-      </Snackbar>
+      <Toast toast={toast} onClose={hideToast} />
     </Box>
   );
 }

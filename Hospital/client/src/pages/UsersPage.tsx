@@ -1,18 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Stack,
-  Typography,
-  IconButton,
   TextField,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
-  Alert,
   InputAdornment,
 } from '@mui/material';
 import {
@@ -20,7 +15,6 @@ import {
   GridActionsCellItem,
   type GridColDef,
 } from '@mui/x-data-grid';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -32,15 +26,20 @@ import {
   deleteUser,
   type User,
 } from '../api/users';
+import { getErrorMessage } from '../lib/errors';
+import { useToast } from '../hooks/useToast';
+import Toast from '../components/Toast';
+import PageHeader from '../components/PageHeader';
+import ConfirmDialog from '../components/ConfirmDialog';
+import { dataGridSx, dataGridWrapperSx } from '../components/dataGridStyles';
 
 export default function UsersPage() {
-  const navigate = useNavigate();
-
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
 
+  // Add/Edit dialog state.
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<User | null>(null);
   const [email, setEmail] = useState('');
@@ -48,18 +47,19 @@ export default function UsersPage() {
   const [saving, setSaving] = useState(false);
 
   const [toDelete, setToDelete] = useState<User | null>(null);
-  const [toast, setToast] = useState<{ msg: string; sev: 'success' | 'error' } | null>(null);
+  const { toast, showToast, hideToast } = useToast();
 
+  // Load the full user list from the API.
   const fetchRows = useCallback(async () => {
     setLoading(true);
     try {
       setAllUsers(await listUsers());
     } catch {
-      setToast({ msg: 'Failed to load users', sev: 'error' });
+      showToast('Failed to load users', 'error');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   useEffect(() => {
     fetchRows();
@@ -76,6 +76,7 @@ export default function UsersPage() {
     [allUsers, search]
   );
 
+  // Open the dialog in "add" mode with empty fields.
   function openAdd() {
     setEditing(null);
     setEmail('');
@@ -83,6 +84,7 @@ export default function UsersPage() {
     setDialogOpen(true);
   }
 
+  // Open the dialog in "edit" mode pre-filled with the row's email.
   function openEdit(u: User) {
     setEditing(u);
     setEmail(u.email);
@@ -90,39 +92,39 @@ export default function UsersPage() {
     setDialogOpen(true);
   }
 
+  // Create or update the user, then refresh the grid.
   async function handleSave() {
     if (!email.trim() || (!editing && !password.trim())) {
-      setToast({ msg: 'Email and password are required', sev: 'error' });
+      showToast('Email and password are required', 'error');
       return;
     }
     setSaving(true);
     try {
       if (editing) {
         await updateUser(editing._id, { email: email.trim(), password: password.trim() || undefined });
-        setToast({ msg: 'User updated', sev: 'success' });
+        showToast('User updated', 'success');
       } else {
         await createUser({ email: email.trim(), password: password.trim() });
-        setToast({ msg: 'User added', sev: 'success' });
+        showToast('User added', 'success');
       }
       setDialogOpen(false);
       fetchRows();
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { msg?: string } } })?.response?.data?.msg || 'Save failed';
-      setToast({ msg, sev: 'error' });
+      showToast(getErrorMessage(err, 'Save failed'), 'error');
     } finally {
       setSaving(false);
     }
   }
 
+  // Delete the confirmed user, then refresh the grid.
   async function handleDelete() {
     if (!toDelete) return;
     try {
       await deleteUser(toDelete._id);
-      setToast({ msg: `User “${toDelete.email}” deleted`, sev: 'success' });
+      showToast(`User “${toDelete.email}” deleted`, 'success');
       fetchRows();
     } catch {
-      setToast({ msg: 'Delete failed', sev: 'error' });
+      showToast('Delete failed', 'error');
     } finally {
       setToDelete(null);
     }
@@ -172,31 +174,13 @@ export default function UsersPage() {
 
   return (
     <Box>
-      <Stack direction="row" spacing={1.5} sx={{ mb: 1, alignItems: 'center' }}>
-        <IconButton
-          aria-label="Back to dashboard"
-          onClick={() => navigate('/admin')}
-          sx={{
-            border: '1px solid',
-            borderColor: 'divider',
-            color: 'text.secondary',
-            transition: 'background-color 0.2s, color 0.2s, border-color 0.2s',
-            '&:hover': {
-              bgcolor: 'primary.main',
-              borderColor: 'primary.main',
-              color: 'primary.contrastText',
-            },
-          }}
-        >
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h4">Manage Users</Typography>
-      </Stack>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        View every admin user below. Use the action icons on each row to edit or delete, or add a new one.
-        Passwords are hashed and never displayed — use Edit to set a new one.
-      </Typography>
+      <PageHeader
+        backTo="/admin"
+        title="Manage Users"
+        description="View every admin user below. Use the action icons on each row to edit or delete, or add a new one. Passwords are hashed and never displayed — use Edit to set a new one."
+      />
 
+      {/* Search box + Add button */}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         spacing={2}
@@ -223,7 +207,8 @@ export default function UsersPage() {
         </Button>
       </Stack>
 
-      <Box sx={{ bgcolor: 'background.paper', borderRadius: 3, boxShadow: 1 }}>
+      {/* Users table */}
+      <Box sx={dataGridWrapperSx}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -235,19 +220,7 @@ export default function UsersPage() {
           disableColumnMenu
           disableColumnSorting
           autoHeight
-          sx={{
-            border: 'none',
-            // Paint the navy background directly on the header strip + each header
-            // cell (don't rely on the --DataGrid-containerBackground variable, which
-            // this build leaves white), then force white title text on top.
-            '--DataGrid-containerBackground': 'hsl(222,44%,8%)',
-            '& .MuiDataGrid-columnHeaders': { backgroundColor: 'hsl(222,44%,8%)' },
-            '& .MuiDataGrid-columnHeader': { backgroundColor: 'hsl(222,44%,8%)', color: '#fff' },
-            '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 600, color: '#fff' },
-            '& .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-sortIcon, & .MuiDataGrid-menuIconButton': {
-              color: '#fff',
-            },
-          }}
+          sx={dataGridSx}
         />
       </Box>
 
@@ -281,31 +254,15 @@ export default function UsersPage() {
       </Dialog>
 
       {/* Delete confirm */}
-      <Dialog open={!!toDelete} onClose={() => setToDelete(null)}>
-        <DialogTitle>Delete user?</DialogTitle>
-        <DialogContent>
-          <Typography>Delete “{toDelete?.email}”? This cannot be undone.</Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setToDelete(null)}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleDelete}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmDialog
+        open={!!toDelete}
+        title="Delete user?"
+        message={`Delete “${toDelete?.email}”? This cannot be undone.`}
+        onConfirm={handleDelete}
+        onCancel={() => setToDelete(null)}
+      />
 
-      <Snackbar
-        open={!!toast}
-        autoHideDuration={3000}
-        onClose={() => setToast(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        {toast ? (
-          <Alert severity={toast.sev} onClose={() => setToast(null)} variant="filled">
-            {toast.msg}
-          </Alert>
-        ) : undefined}
-      </Snackbar>
+      <Toast toast={toast} onClose={hideToast} />
     </Box>
   );
 }

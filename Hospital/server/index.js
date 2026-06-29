@@ -7,12 +7,13 @@ const connectDB = require('./db/connect');
 const authRoutes = require('./routes/auth');
 const hospitalRoutes = require('./routes/hospitals');
 const userRoutes = require('./routes/users');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3094;
 
-app.use(cors());
-app.use(express.json());
+app.use(cors());            // allow cross-origin API calls (e.g. local dev)
+app.use(express.json());    // parse JSON request bodies
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
@@ -31,6 +32,9 @@ app.use('/api', (req, res) => res.status(404).json({ msg: 'Not found' }));
 const clientDist = path.join(__dirname, '..', 'client', 'dist');
 app.use(express.static(clientDist));
 app.get('*', (req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+
+// Central error handler — must be registered last so next(err) lands here.
+app.use(errorHandler);
 
 const start = async () => {
     try {

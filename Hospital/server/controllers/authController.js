@@ -14,6 +14,18 @@ function signToken(user) {
     );
 }
 
+// The profile shape sent to the client / stored in the Redux store (never the hash).
+function publicUser(user) {
+    return {
+        id: user._id,
+        firstName: user.firstName,
+        middleName: user.middleName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+    };
+}
+
 // A bcrypt hash always begins with "$2a$", "$2b$" or "$2y$".
 function looksHashed(value) {
     return typeof value === 'string' && /^\$2[aby]\$/.test(value);
@@ -49,15 +61,17 @@ const login = asyncHandler(async (req, res) => {
         return res.status(401).json({ msg: 'Invalid email or password' });
     }
 
-    return res.json({
-        token: signToken(user),
-        user: { id: user._id, email: user.email },
-    });
+    return res.json({ token: signToken(user), user: publicUser(user) });
 });
 
-// GET /api/auth/me  (protected) — lets the SPA confirm the token is still valid
+// GET /api/auth/me  (protected) — re-loads the full profile so the SPA can
+// rehydrate its store on refresh and confirm the token is still valid.
 const me = asyncHandler(async (req, res) => {
-    return res.json({ user: req.user });
+    const user = await Login.findById(req.user.id).select('-password');
+    if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+    }
+    return res.json({ user: publicUser(user) });
 });
 
 module.exports = { login, me };

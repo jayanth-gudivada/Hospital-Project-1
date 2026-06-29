@@ -2,15 +2,16 @@ import { type ReactNode } from 'react';
 import { AppBar, Toolbar, Box, Button, Container, Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useAppDispatch } from '../store/hooks';
+import { logout } from '../store/authSlice';
 
 // Shared admin chrome: dark top bar with the Doclab logo + Logout.
 export default function Layout({ children }: { children: ReactNode }) {
-  const { logout } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   function handleLogout() {
-    logout();
+    dispatch(logout());
     navigate('/', { replace: true });
   }
 

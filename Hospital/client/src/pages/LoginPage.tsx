@@ -9,15 +9,15 @@ import {
   Alert,
   Stack,
 } from '@mui/material';
-import { useAuth } from '../auth/AuthContext';
-import { getErrorMessage } from '../lib/errors';
+import { useAppDispatch } from '../store/hooks';
+import { login } from '../store/authSlice';
 
 interface LocationState {
   from?: string;
 }
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as LocationState | null)?.from || '/admin';
@@ -32,10 +32,11 @@ export default function LoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      await login(email.trim(), password);
+      await dispatch(login({ email: email.trim(), password })).unwrap();
       navigate(from, { replace: true });
     } catch (err: unknown) {
-      setError(getErrorMessage(err, 'Login failed. Please try again.'));
+      // The thunk rejects with the server message (a string) via rejectWithValue.
+      setError(typeof err === 'string' ? err : 'Login failed. Please try again.');
     } finally {
       setSubmitting(false);
     }

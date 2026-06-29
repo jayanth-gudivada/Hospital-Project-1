@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -23,6 +24,13 @@ app.use('/api/users', userRoutes);
 
 // 404 fallback for unknown API routes
 app.use('/api', (req, res) => res.status(404).json({ msg: 'Not found' }));
+
+// Serve the built React SPA (client/dist) in production. The client uses a
+// relative '/api' base URL, so hosting both from the same origin needs no extra
+// config. Any non-/api route falls back to index.html for client-side routing.
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientDist));
+app.get('*', (req, res) => res.sendFile(path.join(clientDist, 'index.html')));
 
 const start = async () => {
     try {

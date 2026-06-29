@@ -27,6 +27,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { listHospitals, type Hospital } from '../api/hospitals';
+import ThemeToggle from '../components/ThemeToggle';
 
 const services = [
   {
@@ -131,6 +132,7 @@ export default function PublicHomePage() {
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <Button color="inherit" href="#services">Services</Button>
             <Button color="inherit" href="#blog">Blog</Button>
+            <ThemeToggle />
             <Button variant="contained" component={RouterLink} to="/login">
               Login
             </Button>
@@ -141,7 +143,13 @@ export default function PublicHomePage() {
       {/* Hero + search */}
       <Box
         sx={{
-          backgroundImage: 'linear-gradient(180deg, hsla(187,25%,94%,0.9), hsla(187,25%,94%,0.6)), url(/assets/images/hero-bg.png)',
+          // Overlay tint follows the theme so hero text stays readable in both modes.
+          backgroundImage: (theme) =>
+            `linear-gradient(180deg, ${
+              theme.palette.mode === 'dark'
+                ? 'hsla(222,24%,9%,0.92), hsla(222,24%,9%,0.72)'
+                : 'hsla(187,25%,94%,0.9), hsla(187,25%,94%,0.6)'
+            }), url(/assets/images/hero-bg.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           py: { xs: 6, md: 10 },
@@ -280,7 +288,7 @@ export default function PublicHomePage() {
       </Container>
 
       {/* About */}
-      <Box sx={{ bgcolor: '#fff', py: 8 }}>
+      <Box sx={{ bgcolor: 'background.paper', py: 8 }}>
         <Container maxWidth="lg">
           <Box sx={{ display: 'grid', gap: 4, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, alignItems: 'center' }}>
             <Box>
@@ -323,7 +331,7 @@ export default function PublicHomePage() {
       </Container>
 
       {/* Blog */}
-      <Box sx={{ bgcolor: '#fff', py: 8 }} id="blog">
+      <Box sx={{ bgcolor: 'background.paper', py: 8 }} id="blog">
         <Container maxWidth="lg">
           <Typography variant="overline" color="primary.dark" sx={{ fontWeight: 700, textAlign: 'center', display: 'block' }}>
             News & Article

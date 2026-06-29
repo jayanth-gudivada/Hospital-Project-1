@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/authSlice';
+import ThemeToggle from '../components/ThemeToggle';
 
 interface LocationState {
   from?: string;
@@ -53,6 +54,10 @@ export default function LoginPage() {
         background: 'linear-gradient(135deg, hsl(222,44%,8%) 0%, hsl(186,72%,24%) 100%)',
       }}
     >
+      {/* Theme toggle floats over the gradient (white on the dark backdrop). */}
+      <Box sx={{ position: 'fixed', top: 16, right: 16, color: '#fff' }}>
+        <ThemeToggle />
+      </Box>
       <Paper elevation={6} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3 }}>
         <Stack spacing={1} sx={{ mb: 3, alignItems: 'center' }}>
           <Typography variant="h5">Admin Login</Typography>

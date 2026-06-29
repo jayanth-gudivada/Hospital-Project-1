@@ -4,6 +4,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store/hooks';
 import { logout } from '../store/authSlice';
+import ThemeToggle from './ThemeToggle';
 
 // Shared admin chrome: dark top bar with the Doclab logo + Logout.
 export default function Layout({ children }: { children: ReactNode }) {
@@ -22,7 +23,8 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Box component={RouterLink} to="/admin" sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <Box component="img" src="/logo.svg" alt="Doclab" sx={{ height: 34 }} />
           </Box>
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <ThemeToggle />
             <Button color="inherit" component={RouterLink} to="/admin">
               Dashboard
             </Button>

@@ -1,2 +1,5 @@
 node_modules/
 .env
+
+# One-off DB migration scripts — run locally, not needed for deployment
+scripts/

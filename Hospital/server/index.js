@@ -7,6 +7,7 @@ const connectDB = require('./db/connect');
 const authRoutes = require('./routes/auth');
 const hospitalRoutes = require('./routes/hospitals');
 const userRoutes = require('./routes/users');
+const patientRoutes = require('./routes/patient');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -22,6 +23,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/patient', patientRoutes);
 
 // 404 fallback for unknown API routes
 app.use('/api', (req, res) => res.status(404).json({ msg: 'Not found' }));

@@ -6,7 +6,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "migrate:ids": "node scripts/migrateIds.js",
+    "migrate:profilefill": "node scripts/migrateProfileFill.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

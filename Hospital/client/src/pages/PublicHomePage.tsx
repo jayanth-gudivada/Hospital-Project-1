@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -26,8 +26,10 @@ import {
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { listHospitals, type Hospital } from '../api/hospitals';
 import ThemeToggle from '../components/ThemeToggle';
+import { setPostLoginRedirect } from '../lib/postLoginRedirect';
 
 const services = [
   {
@@ -87,6 +89,8 @@ const blogPosts = [
 ];
 
 export default function PublicHomePage() {
+  const navigate = useNavigate();
+
   const [location, setLocation] = useState('');
   const [searchedTerm, setSearchedTerm] = useState('');
   const [results, setResults] = useState<Hospital[] | null>(null);
@@ -101,6 +105,14 @@ export default function PublicHomePage() {
       setResults(null);
       setError('');
     }
+  }
+
+  // This page is guest-only (signed-in users are redirected away by PublicRoute),
+  // so "Consult now" always stashes the intended consult route and sends the
+  // visitor to /login. After they authenticate we return them to that route.
+  function handleConsult(hospital: Hospital) {
+    setPostLoginRedirect(`/patient/consult/${hospital._id}`);
+    navigate('/login');
   }
 
   async function handleSearch(e: FormEvent) {
@@ -236,6 +248,7 @@ export default function PublicHomePage() {
                           <TableCell><b>Name</b></TableCell>
                           <TableCell><b>Location</b></TableCell>
                           <TableCell><b>Address</b></TableCell>
+                          <TableCell align="right"><b>Action</b></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -244,6 +257,17 @@ export default function PublicHomePage() {
                             <TableCell>{h.name}</TableCell>
                             <TableCell>{h.location}</TableCell>
                             <TableCell>{h.address}</TableCell>
+                            <TableCell align="right">
+                              <Button
+                                variant="contained"
+                                size="small"
+                                startIcon={<LocalHospitalIcon />}
+                                onClick={() => handleConsult(h)}
+                                sx={{ whiteSpace: 'nowrap' }}
+                              >
+                                Consult now
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

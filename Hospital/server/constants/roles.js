@@ -9,11 +9,4 @@ const ROLES = {
 // All valid codes, used for enum validation: ['01', '02', '03'].
 const ROLE_CODES = Object.values(ROLES);
 
-// Reverse map (code -> label) for display/debugging.
-const ROLE_LABELS = {
-    [ROLES.patient]: 'patient',
-    [ROLES.doctor]: 'doctor',
-    [ROLES.admin]: 'admin',
-};
-
-module.exports = { ROLES, ROLE_CODES, ROLE_LABELS };
+module.exports = { ROLES, ROLE_CODES };

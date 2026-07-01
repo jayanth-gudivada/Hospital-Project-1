@@ -10,6 +10,8 @@ export interface AuthUser {
   lastName?: string;
   email: string;
   role?: string;
+  // 1 => the user still needs to complete their profile (gates the patient portal).
+  profileFill?: number;
 }
 
 interface AuthState {
@@ -35,6 +37,31 @@ export const login = createAsyncThunk(
   }
 );
 
+// Fields collected by the public signup form (role is forced to patient server-side).
+export interface RegisterInput {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
+// Self-service signup. The server creates a patient, returns a token + profile,
+// and we auto-login by persisting the JWT — same shape as the login thunk.
+export const register = createAsyncThunk(
+  'auth/register',
+  async (input: RegisterInput, { rejectWithValue }) => {
+    try {
+      const res = await api.post('/auth/register', input);
+      setToken(res.data.token);
+      return res.data.user as AuthUser;
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, 'Registration failed. Please try again.'));
+    }
+  }
+);
+
 // On boot/refresh, reload the profile from the token so the store survives reloads.
 export const loadSession = createAsyncThunk('auth/loadSession', async () => {
   const res = await api.get('/auth/me');
@@ -50,10 +77,18 @@ const authSlice = createSlice({
       setToken(null);
       state.user = null;
     },
+    // Called after a successful profile save so the completion gate stops firing
+    // without needing a full re-login/reload.
+    markProfileFilled(state) {
+      if (state.user) state.user.profileFill = 0;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action: PayloadAction<AuthUser>) => {
+        state.user = action.payload;
+      })
+      .addCase(register.fulfilled, (state, action: PayloadAction<AuthUser>) => {
         state.user = action.payload;
       })
       .addCase(loadSession.pending, (state) => {
@@ -72,5 +107,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, markProfileFilled } = authSlice.actions;
 export default authSlice.reducer;

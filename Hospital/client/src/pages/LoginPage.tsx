@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Paper,
@@ -8,11 +8,14 @@ import {
   Typography,
   Alert,
   Stack,
+  Divider,
+  Link,
 } from '@mui/material';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/authSlice';
 import ThemeToggle from '../components/ThemeToggle';
-import { roleHome } from '../lib/roles';
+import { roleHome, ROLE_PATIENT, effectiveRole } from '../lib/roles';
+import { takePostLoginRedirect } from '../lib/postLoginRedirect';
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
@@ -28,9 +31,16 @@ export default function LoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      // Send each user to their role's area (admin / doctor / patient).
       const user = await dispatch(login({ email: email.trim(), password })).unwrap();
-      navigate(roleHome(user.role), { replace: true });
+      // If a gated action sent them here (e.g. "Consult now"), return them to it —
+      // but only patients can reach that page, so ignore it for other roles.
+      const redirect = takePostLoginRedirect();
+      if (redirect && effectiveRole(user.role) === ROLE_PATIENT) {
+        navigate(redirect, { replace: true });
+      } else {
+        // Otherwise send each user to their role's area (admin / doctor / patient).
+        navigate(roleHome(user.role), { replace: true });
+      }
     } catch (err: unknown) {
       // The thunk rejects with the server message (a string) via rejectWithValue.
       setError(typeof err === 'string' ? err : 'Login failed. Please try again.');
@@ -54,11 +64,11 @@ export default function LoginPage() {
       <Box sx={{ position: 'fixed', top: 16, right: 16, color: '#fff' }}>
         <ThemeToggle />
       </Box>
-      <Paper elevation={6} sx={{ p: 4, width: '100%', maxWidth: 400, borderRadius: 3 }}>
-        <Stack spacing={1} sx={{ mb: 3, alignItems: 'center' }}>
-          <Typography variant="h5">Admin Login</Typography>
-          <Typography variant="body2" color="text.secondary">
-            Sign in to manage Doclab
+      <Paper elevation={6} sx={{ p: { xs: 2.5, sm: 3 }, width: '100%', maxWidth: 360, borderRadius: 3 }}>
+        <Stack spacing={0.5} sx={{ mb: 2.5, alignItems: 'center' }}>
+          <Typography variant="h6">Welcome back</Typography>
+          <Typography variant="caption" color="text.secondary">
+            Sign in to your Doclab account
           </Typography>
         </Stack>
 
@@ -69,10 +79,11 @@ export default function LoginPage() {
         )}
 
         <Box component="form" onSubmit={handleSubmit}>
-          <Stack spacing={2}>
+          <Stack spacing={1.75}>
             <TextField
               label="Email"
               type="email"
+              size="small"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               fullWidth
@@ -82,16 +93,25 @@ export default function LoginPage() {
             <TextField
               label="Password"
               type="password"
+              size="small"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
               required
             />
-            <Button type="submit" variant="contained" size="large" disabled={submitting}>
+            <Button type="submit" variant="contained" disabled={submitting}>
               {submitting ? 'Signing in…' : 'Sign in'}
             </Button>
           </Stack>
         </Box>
+
+        <Divider sx={{ my: 2 }} />
+        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center' }}>
+          New to Doclab?{' '}
+          <Link component={RouterLink} to="/register" underline="hover">
+            Create an account
+          </Link>
+        </Typography>
       </Paper>
     </Box>
   );
